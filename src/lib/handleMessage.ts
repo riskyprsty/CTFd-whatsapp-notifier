@@ -196,7 +196,7 @@ export async function handleMessage(
                 text: '🛠️ Monitor commands:\n' +
                   '.monitor start [interval]\n' +
                   '.monitor stop\n' +
-                  '.monitor interval [minutes]'
+                  '.monitor test'
               },
               jid
             );
