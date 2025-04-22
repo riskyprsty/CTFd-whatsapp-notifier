@@ -19,7 +19,6 @@ export const bloodMessages = {
   export type BloodLabel = keyof typeof bloodMessages;
 
   export interface BloodValues {
-    user: string;
     team: string;
     challenge: string;
   }

@@ -119,9 +119,9 @@ export async function getCTFDdata(endpoint: string, sock: WASocket, jid: string)
   return null;
 }
 
-async function getUserDetails(userId: number, sock: WASocket, jid: string): Promise<string> {
+async function getTeamDetails(userId: number, sock: WASocket, jid: string): Promise<string> {
   try {
-    const userData = await getCTFDdata(`users/${userId}`, sock, jid);
+    const userData = await getCTFDdata(`teams/${userId}`, sock, jid);
     return userData?.name || 'Unknown User';
   } catch (error) {
     console.error(`Error fetching user details for ID ${userId}:`, error);
@@ -153,12 +153,11 @@ async function checkBloodsOnly(sock: WASocket, jid: string): Promise<void> {
         if (notified.includes(solve.account_id)) continue;
         if (notified.length >= 3) break;
 
-        const userName = await getUserDetails(solve.account_id, sock, jid);
+        const teamName = await getTeamDetails(solve.account_id, sock, jid);
         const label = labels[notified.length];
 
         const msg = getRandomBloodMessage(label, {
-          user: userName,
-          team: solve.team || 'No Team',
+          team: teamName,
           challenge: ch.name,
         });
         
@@ -197,7 +196,7 @@ async function checkBloodsOnly(sock: WASocket, jid: string): Promise<void> {
 //       if (!globalFirstBloods[challengeId]) {
 //         const firstSolve = solves[0];
 //         const adjustedUserId = firstSolve.account_id;
-//         const userName = await getUserDetails(adjustedUserId, sock, jid);
+//         const userName = await getTeamDetails(adjustedUserId, sock, jid);
         
 //         const msg = [
 //           '🩸 *FIRST BLOOD!* 🩸',
@@ -218,7 +217,7 @@ async function checkBloodsOnly(sock: WASocket, jid: string): Promise<void> {
 //         if (globalSolves[solveKey]) continue;
 
 //         const adjustedUserId = solve.account_id;
-//         const userName = await getUserDetails(adjustedUserId, sock, jid);
+//         const userName = await getTeamDetails(adjustedUserId, sock, jid);
         
 //         const msg = [
 //           '✅ *SOLVE!* ✅',

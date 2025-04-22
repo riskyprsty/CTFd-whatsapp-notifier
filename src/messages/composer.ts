@@ -67,7 +67,6 @@ import {
    const templates = bloodMessages[label];
    const idx = Math.floor(Math.random() * templates.length);
    return templates[idx]
-     .replace('{user}', values.user)
      .replace('{team}', values.team || 'No Team')
      .replace('{challenge}', values.challenge);
  }
