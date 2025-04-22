@@ -1,0 +1,6 @@
+node_modules/
+.env
+auth/
+dist/
+logs/wa-logs.txt
+firebaseConfig.json

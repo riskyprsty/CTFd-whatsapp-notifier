@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  notifier:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ctfd-wa-notifier:latest
+    container_name: ctfd-wa-notifier
+    restart: unless-stopped
+    env_file: .env  
+    environment:
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      - FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
+      - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
+      - FIREBASE_APP_ID=${FIREBASE_APP_ID}
+      - CTFD_URL=${CTFD_URL}
+      - CTFD_API_KEY=${CTFD_API_KEY}
+      - NODE_ENV=production
+    volumes:
+      - ./logs:/app/logs
