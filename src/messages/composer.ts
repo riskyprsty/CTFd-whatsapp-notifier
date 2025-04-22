@@ -1,6 +1,7 @@
 import {
     getUserSettings,
  } from '../services/firebase.js';
+ import { BloodLabel, BloodValues, bloodMessages  } from '../messages/messages.js';
  
  export const helpMessage = async (
     senderName: string,
@@ -12,7 +13,7 @@ import {
  I'm a *TCC-CTF-BOT* 🔥
  What can I do for you?
  
- ┌      *ᴍᴏɴɪᴛᴏʀɪɴɢ*
+ ┌      *ᴍᴏɴɪᴛᴏʀ*
  │ ◦   .sᴛᴀᴛᴜs
  │ ◦   .ʟᴏᴄᴀᴛɪᴏɴ
  │ ◦   .ᴍᴏᴅᴇᴍ
@@ -65,3 +66,15 @@ import {
     const message = `Halo, ${senderName} 🔥\nSuccess bind your account *${vehicleId}* to your number 🎉. \n\n🛵 Type /help for see available commands`;
     return message;
  };
+
+ export function getRandomBloodMessage(
+   label: BloodLabel,
+   values: BloodValues
+ ): string {
+   const templates = bloodMessages[label];
+   const idx = Math.floor(Math.random() * templates.length);
+   return templates[idx]
+     .replace('{user}', values.user)
+     .replace('{team}', values.team || 'No Team')
+     .replace('{challenge}', values.challenge);
+ }

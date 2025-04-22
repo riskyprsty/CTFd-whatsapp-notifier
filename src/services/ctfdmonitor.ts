@@ -6,7 +6,8 @@ import {
   getGlobalBloods,
   setGlobalBlood,
 } from './firebase.js';
-
+import { getRandomBloodMessage } from '../messages/composer.js';
+import { BloodLabel } from '../messages/messages.js';
 
 interface Challenge {
   id: number;
@@ -146,7 +147,7 @@ async function checkBloodsOnly(sock: WASocket, jid: string): Promise<void> {
       const notified = globalBloods[ch.id] || [];
       if (notified.length >= 3) continue;
 
-      const labels = ['FIRST', 'SECOND', 'THIRD'];
+      const labels: BloodLabel[] = ['first', 'second', 'third'];
 
       for (const solve of solves) {
         if (notified.includes(solve.account_id)) continue;
@@ -155,17 +156,17 @@ async function checkBloodsOnly(sock: WASocket, jid: string): Promise<void> {
         const userName = await getUserDetails(solve.account_id, sock, jid);
         const label = labels[notified.length];
 
-        const msg = [
-          `🩸 *${label} BLOOD!* 🩸`,
-          `*Challenge*: ${ch.name}`,
-          `*User*: ${userName}`,
-          `*Team*: ${solve.team || 'No Team'}`,
-          `*Time*: ${new Date(solve.date).toLocaleString('id-ID', {
-            timeZone: 'Asia/Jakarta',
-          })}`,
-        ].join('\n');
+        const msg = getRandomBloodMessage(label, {
+          user: userName,
+          team: solve.team || 'No Team',
+          challenge: ch.name,
+        });
+        
+        const timeString = `🕒 ${new Date(solve.date).toLocaleString('id-ID', {
+          timeZone: 'Asia/Jakarta',
+        })}`;
 
-        await sendMessageWTyping(sock, { text: msg }, jid);
+        await sendMessageWTyping(sock, { text: `${msg}\n\n${timeString}` }, jid);
         await setGlobalBlood(ch.id, solve.account_id);
         notified.push(solve.account_id);
       }
